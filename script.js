@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // --- Data for Provinces and Cities ---
+    // --- Comprehensive Data for Provinces and Cities of Iran ---
     const provincesAndCities = {
         "آذربایجان شرقی": ["تبریز", "مراغه", "مرند", "اهر", "میانه", "بناب", "سراب", "آذرشهر", "عجب‌شیر", "شبستر", "جلفا", "هریس", "بستان‌آباد", "ورزقان", "اسکو", "کلیبر", "ملکان", "هادی‌شهر"],
         "آذربایجان غربی": ["ارومیه", "خوی", "مهاباد", "بوکان", "میاندوآب", "سلماس", "پیرانشهر", "نقده", "تکاب", "شاهین‌دژ", "ماکو", "سردشت", "اشنویه", "چایپاره", "شوط"],
@@ -47,58 +47,65 @@ document.addEventListener('DOMContentLoaded', function() {
     const fullNameInput = document.getElementById('fullName');
     const ndaClientNameSpan = document.getElementById('nda-client-name');
 
-    // --- NEW: Handle Form Submission with JavaScript (AJAX) ---
-    form.addEventListener('submit', async function(event) {
-        event.preventDefault(); // Stop the default page reload/redirect
+    // --- AJAX Form Submission Logic ---
+    if (form) {
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault(); // Stop the default page reload/redirect
 
-        const originalButtonHTML = submitBtn.innerHTML;
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = `<span class="btn-text">در حال ارسال...</span><div class="spinner"></div>`;
+            const originalButtonHTML = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<span class="btn-text">در حال ارسال...</span><div class="spinner"></div>`;
 
-        const formData = new FormData(form);
-        // We use fetch with FormData. Formspree handles it correctly.
-        // The 'action' attribute from the HTML form is used automatically.
+            const formData = new FormData(form);
 
-        try {
-            const response = await fetch(event.target.action, {
-                method: form.method,
-                body: formData,
-                headers: {
-                    'Accept': 'application/json' // This is KEY for AJAX submission to Formspree
+            try {
+                const response = await fetch(event.target.action, {
+                    method: form.method,
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json' // This header is THE KEY to fixing the CORS error
+                    }
+                });
+
+                if (response.ok) {
+                    // Success!
+                    form.style.display = 'none';
+                    if(successMessageDiv) successMessageDiv.style.display = 'block';
+                } else {
+                    // Handle server-side errors from Formspree
+                    throw new Error('خطا در برقراری ارتباط با سرور.');
                 }
-            });
-
-            if (response.ok) {
-                // Success!
-                form.style.display = 'none';
-                successMessageDiv.style.display = 'block';
-            } else {
-                // Handle server-side errors from Formspree
-                throw new Error('خطا در برقراری ارتباط با سرور.');
+            } catch (error) {
+                console.error('Submission failed:', error);
+                alert('متاسفانه در ارسال درخواست خطایی رخ داد. لطفاً اتصال اینترنت خود را بررسی کرده و دوباره تلاش کنید.');
+                // Restore button state on error
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalButtonHTML;
             }
-        } catch (error) {
-            console.error('Submission failed:', error);
-            alert('متاسفانه در ارسال درخواست خطایی رخ داد. لطفاً اتصال اینترنت خود را بررسی کرده و دوباره تلاش کنید.');
-            // Restore button state on error
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = originalButtonHTML;
-        }
-    });
+        });
+    }
 
-
-    // --- All other helper functions remain the same ---
+    // --- Dynamic Name Insertion in NDA ---
     function updateNdaName() {
         const name = fullNameInput.value.trim();
-        ndaClientNameSpan.textContent = name ? name : "شما";
+        if (ndaClientNameSpan) {
+            ndaClientNameSpan.textContent = name ? name : "شما";
+        }
     }
 
+    // --- Conditional Lawyer Fields ---
     function toggleLawyerFields() {
         const isLawyer = document.querySelector('input[name="نوع متقاضی"]:checked').value === 'lawyer';
-        lawyerFieldsDiv.classList.toggle('visible', isLawyer);
-        document.getElementById('lawyerName').required = isLawyer;
-        document.getElementById('licenseNumber').required = isLawyer;
+        if (lawyerFieldsDiv) {
+            lawyerFieldsDiv.classList.toggle('visible', isLawyer);
+        }
+        if (document.getElementById('lawyerName')) {
+            document.getElementById('lawyerName').required = isLawyer;
+            document.getElementById('licenseNumber').required = isLawyer;
+        }
     }
 
+    // --- Province and City Dropdowns ---
     function populateProvinces() {
         if (!provinceSelect) return;
         provinceSelect.innerHTML = '<option value="">-- انتخاب استان --</option>';
@@ -126,6 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    // --- Enable/Disable Submit Button ---
     function checkFormValidity() {
         if (!submitBtn || !termsAgreeCheckbox || !ndaAgreeCheckbox) return;
         submitBtn.disabled = !(termsAgreeCheckbox.checked && ndaAgreeCheckbox.checked);
