@@ -201,3 +201,69 @@ select[disabled] { background-color: #e9ecef; cursor: not-allowed; }
   100% { transform: rotate(360deg); }
 }
 }
+/* --- SUCCESS MESSAGE STYLES --- */
+#success-message {
+    text-align: center;
+    padding: 3rem 2rem;
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+.success-icon {
+    font-size: 5rem;
+    color: #28a745; /* Success Green */
+    line-height: 1;
+    margin-bottom: 1.5rem;
+}
+
+#success-message h2 {
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: var(--navy-dark);
+    margin-bottom: 1rem;
+}
+
+#success-message p {
+    font-size: 1.1rem;
+    color: var(--navy-light);
+    max-width: 500px;
+    margin: 0 auto 2rem auto;
+}
+
+.reset-btn {
+    padding: 0.8rem 2rem;
+    border: 1px solid var(--grey-light);
+    border-radius: 8px;
+    font-family: var(--font-family);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    background-color: transparent;
+    color: var(--navy-light);
+    transition: all 0.3s ease;
+}
+
+.reset-btn:hover {
+    background-color: var(--grey-light);
+    color: var(--navy-dark);
+    transform: translateY(-2px);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- SPINNER FOR SUBMIT BUTTON --- */
+.spinner {
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top: 3px solid #fff;
+  width: 1.2em;
+  height: 1.2em;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

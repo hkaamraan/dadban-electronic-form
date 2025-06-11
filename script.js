@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // --- Comprehensive Data for Provinces and Cities of Iran ---
+    // --- Data for Provinces and Cities ---
     const provincesAndCities = {
         "آذربایجان شرقی": ["تبریز", "مراغه", "مرند", "اهر", "میانه", "بناب", "سراب", "آذرشهر", "عجب‌شیر", "شبستر", "جلفا", "هریس", "بستان‌آباد", "ورزقان", "اسکو", "کلیبر", "ملکان", "هادی‌شهر"],
         "آذربایجان غربی": ["ارومیه", "خوی", "مهاباد", "بوکان", "میاندوآب", "سلماس", "پیرانشهر", "نقده", "تکاب", "شاهین‌دژ", "ماکو", "سردشت", "اشنویه", "چایپاره", "شوط"],
@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- Get DOM Elements ---
     const form = document.getElementById('serviceRequestForm');
     const submitBtn = document.getElementById('submit-btn');
+    const successMessageDiv = document.getElementById('success-message');
     const clientTypeRadios = document.querySelectorAll('input[name="نوع متقاضی"]');
     const lawyerFieldsDiv = document.getElementById('lawyer-fields');
     const provinceSelect = document.getElementById('province');
@@ -46,13 +47,51 @@ document.addEventListener('DOMContentLoaded', function() {
     const fullNameInput = document.getElementById('fullName');
     const ndaClientNameSpan = document.getElementById('nda-client-name');
 
-    // --- Dynamic Name Insertion in NDA ---
+    // --- NEW: Handle Form Submission with JavaScript (AJAX) ---
+    form.addEventListener('submit', async function(event) {
+        event.preventDefault(); // Stop the default page reload/redirect
+
+        const originalButtonHTML = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span class="btn-text">در حال ارسال...</span><div class="spinner"></div>`;
+
+        const formData = new FormData(form);
+        // We use fetch with FormData. Formspree handles it correctly.
+        // The 'action' attribute from the HTML form is used automatically.
+
+        try {
+            const response = await fetch(event.target.action, {
+                method: form.method,
+                body: formData,
+                headers: {
+                    'Accept': 'application/json' // This is KEY for AJAX submission to Formspree
+                }
+            });
+
+            if (response.ok) {
+                // Success!
+                form.style.display = 'none';
+                successMessageDiv.style.display = 'block';
+            } else {
+                // Handle server-side errors from Formspree
+                throw new Error('خطا در برقراری ارتباط با سرور.');
+            }
+        } catch (error) {
+            console.error('Submission failed:', error);
+            alert('متاسفانه در ارسال درخواست خطایی رخ داد. لطفاً اتصال اینترنت خود را بررسی کرده و دوباره تلاش کنید.');
+            // Restore button state on error
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalButtonHTML;
+        }
+    });
+
+
+    // --- All other helper functions remain the same ---
     function updateNdaName() {
         const name = fullNameInput.value.trim();
         ndaClientNameSpan.textContent = name ? name : "شما";
     }
 
-    // --- Conditional Lawyer Fields ---
     function toggleLawyerFields() {
         const isLawyer = document.querySelector('input[name="نوع متقاضی"]:checked').value === 'lawyer';
         lawyerFieldsDiv.classList.toggle('visible', isLawyer);
@@ -60,7 +99,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('licenseNumber').required = isLawyer;
     }
 
-    // --- Province and City Dropdowns ---
     function populateProvinces() {
         if (!provinceSelect) return;
         provinceSelect.innerHTML = '<option value="">-- انتخاب استان --</option>';
@@ -88,7 +126,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // --- Enable/Disable Submit Button ---
     function checkFormValidity() {
         if (!submitBtn || !termsAgreeCheckbox || !ndaAgreeCheckbox) return;
         submitBtn.disabled = !(termsAgreeCheckbox.checked && ndaAgreeCheckbox.checked);
@@ -103,5 +140,4 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // --- Initial Setup ---
     populateProvinces();
-    console.log("Form script loaded and initialized successfully.");
 });
