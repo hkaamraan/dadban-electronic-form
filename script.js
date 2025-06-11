@@ -1,12 +1,37 @@
-// File: script.js (The main javascript file for your form)
-
 document.addEventListener('DOMContentLoaded', function() {
-    // --- Data for Provinces and Cities ---
+    // --- Comprehensive Data for Provinces and Cities of Iran ---
     const provincesAndCities = {
-        "آذربایجان شرقی": ["تبریز", "مراغه", "مرند", "اهر", "میانه", "بناب", "سراب", "آذرشهر", "عجب‌شیر", "شبستر", "جلفا", "هریس"],
-        "آذربایجان غربی": ["ارومیه", "خوی", "مهاباد", "بوکان", "میاندوآب", "سلماس", "پیرانشهر", "نقده", "تکاب", "شاهین‌دژ", "ماکو"],
-        // ... (The rest of the comprehensive city list) ...
-        "یزد": ["یزد", "میبد", "اردکان", "بافق", "تفت", "مهریز", "ابرکوه", "خاتم"]
+        "آذربایجان شرقی": ["تبریز", "مراغه", "مرند", "اهر", "میانه", "بناب", "سراب", "آذرشهر", "عجب‌شیر", "شبستر", "جلفا", "هریس", "بستان‌آباد", "ورزقان", "اسکو", "کلیبر", "ملکان", "هادی‌شهر"],
+        "آذربایجان غربی": ["ارومیه", "خوی", "مهاباد", "بوکان", "میاندوآب", "سلماس", "پیرانشهر", "نقده", "تکاب", "شاهین‌دژ", "ماکو", "سردشت", "اشنویه", "چایپاره", "شوط"],
+        "اردبیل": ["اردبیل", "پارس‌آباد", "مشگین‌شهر", "خلخال", "گرمی", "بیله‌سوار", "نمین", "نیر", "کوثر", "سرعین"],
+        "اصفهان": ["اصفهان", "کاشان", "خمینی‌شهر", "نجف‌آباد", "شاهین‌شهر", "شهرضا", "فولادشهر", "مبارکه", "آران و بیدگل", "گلپایگان", "زرین‌شهر", "درچه", "فلاورجان", "لنجان", "نائین"],
+        "البرز": ["کرج", "هشتگرد", "نظرآباد", "فردیس", "محمدشهر", "ماهدشت", "کمال‌شهر", "اشتهارد", "طالقان", "چهارباغ"],
+        "ایلام": ["ایلام", "دهلران", "ایوان", "آبدانان", "دره‌شهر", "مهران", "سرابله", "چرداول", "بدره"],
+        "بوشهر": ["بوشهر", "برازجان", "گناوه", "کنگان", "عسلویه", "خورموج", "دیر", "جم", "دشتی", "دشتستان", "تنگستان"],
+        "تهران": ["تهران", "شهریار", "اسلام‌شهر", "قدس", "ملارد", "ورامین", "پاکدشت", "ری", "قرچک", "بومهن", "پردیس", "دماوند", "فیروزکوه", "رباط‌کریم", "گلستان", "نسیم‌شهر"],
+        "چهارمحال و بختیاری": ["شهرکرد", "بروجن", "فرخ‌شهر", "فارسان", "لردگان", "هفشجان", "جونقان", "سامان", "کیان"],
+        "خراسان جنوبی": ["بیرجند", "قائن", "فردوس", "نهبندان", "طبس", "سربیشه", "بشرویه", "سرایان"],
+        "خراسان رضوی": ["مشهد", "سبزوار", "نیشابور", "تربت حیدریه", "کاشمر", "قوچان", "تربت جام", "تایباد", "چناران", "فریمان", "گناباد", "سرخس", "بردسکن"],
+        "خراسان شمالی": ["بجنورد", "شیروان", "اسفراین", "جاجرم", "آشخانه", "فاروج", "گرمه"],
+        "خوزستان": ["اهواز", "دزفول", "آبادان", "بندر ماهشهر", "اندیمشک", "خرمشهر", "ایذه", "شوشتر", "مسجد سلیمان", "بهبهان", "رامهرمز", "شوش", "شادگان", "باغ‌ملک"],
+        "زنجان": ["زنجان", "ابهر", "خرمدره", "قیدار", "هیدج", "صائین‌قلعه", "سلطانیه"],
+        "سمنان": ["سمنان", "شاهرود", "دامغان", "گرمسار", "مهدی‌شهر", "ایوانکی", "سرخه"],
+        "سیستان و بلوچستان": ["زاهدان", "زابل", "ایرانشهر", "چابهار", "سراوان", "خاش", "کنارک", "نیک‌شهر", "میرجاوه", "راسک"],
+        "فارس": ["شیراز", "کازرون", "جهرم", "مرودشت", "فسا", "لار", "داراب", "نورآباد ممسنی", "آباده", "اقلید", "استهبان", "نی‌ریز", "سپیدان"],
+        "قزوین": ["قزوین", "تاکستان", "الوند", "آبیک", "محمدیه", "اقبالیه", "بوئین‌زهرا"],
+        "قم": ["قم", "جعفریه", "کهک", "قنوات", "سلفچگان", "دستجرد"],
+        "کردستان": ["سنندج", "سقز", "مریوان", "بانه", "کامیاران", "قروه", "دیواندره", "بیجار", "دهگلان"],
+        "کرمان": ["کرمان", "سیرجان", "رفسنجان", "جیرفت", "بم", "زرند", "شهربابک", "بافت", "انار"],
+        "کرمانشاه": ["کرمانشاه", "اسلام‌آباد غرب", "هرسین", "کنگاور", "جوانرود", "سنقر", "پاوه", "گیلانغرب", "صحنه"],
+        "کهگیلویه و بویراحمد": ["یاسوج", "دوگنبدان", "دهدشت", "لیکک", "سی‌سخت", "چرام", "باشت"],
+        "گلستان": ["گرگان", "گنبد کاووس", "علی‌آباد کتول", "بندر ترکمن", "آق‌قلا", "کردکوی", "بندر گز", "مینودشت", "کلاله", "رامیان", "آزادشهر", "مراوه‌تپه", "گمیشان"],
+        "گیلان": ["رشت", "بندرانزلی", "لاهیجان", "لنگرود", "آستارا", "فومن", "صومعه‌سرا", "رودسر", "ماسال", "رضوانشهر", "آستانه اشرفیه", "سیاهکل", "شفت"],
+        "لرستان": ["خرم‌آباد", "بروجرد", "دورود", "الیگودرز", "کوهدشت", "نورآباد", "ازنا", "پلدختر", "الشتر"],
+        "مازندران": ["ساری", "بابل", "آمل", "قائم‌شهر", "بهشهر", "چالوس", "نوشهر", "بابلسر", "محمودآباد", "نکا", "رامسر", "جویبار", "فریدونکنار", "تنکابن"],
+        "مرکزی": ["اراک", "ساوه", "خمین", "محلات", "دلیجان", "تفرش", "آشتیان", "شازند", "خنداب"],
+        "هرمزگان": ["بندرعباس", "میناب", "دهبارز", "بندر لنگه", "قشم", "کیش", "حاجی‌آباد", "بستک", "بندر جاسک"],
+        "همدان": ["همدان", "ملایر", "نهاوند", "اسدآباد", "تویسرکان", "بهار", "کبودرآهنگ", "رزن", "فامنین"],
+        "یزد": ["یزد", "میبد", "اردکان", "بافق", "تفت", "مهریز", "ابرکوه", "خاتم", "اشکذر"]
     };
 
     // --- Get DOM Elements ---
@@ -21,69 +46,62 @@ document.addEventListener('DOMContentLoaded', function() {
     const fullNameInput = document.getElementById('fullName');
     const ndaClientNameSpan = document.getElementById('nda-client-name');
 
-    // --- NEW: Handle Form Submission with JavaScript ---
-    form.addEventListener('submit', async function(event) {
-        event.preventDefault(); // Stop the default form submission
+    // --- Dynamic Name Insertion in NDA ---
+    function updateNdaName() {
+        const name = fullNameInput.value.trim();
+        ndaClientNameSpan.textContent = name ? name : "شما";
+    }
 
-        const originalButtonText = submitBtn.innerHTML;
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = `<span class="btn-text">در حال ارسال...</span><div class="spinner"></div>`;
+    // --- Conditional Lawyer Fields ---
+    function toggleLawyerFields() {
+        const isLawyer = document.querySelector('input[name="نوع متقاضی"]:checked').value === 'lawyer';
+        lawyerFieldsDiv.classList.toggle('visible', isLawyer);
+        document.getElementById('lawyerName').required = isLawyer;
+        document.getElementById('licenseNumber').required = isLawyer;
+    }
 
-        // Create a data object from the form
-        const formData = new FormData(form);
-        const data = {};
-        formData.forEach((value, key) => {
-            if (data[key]) {
-                if (!Array.isArray(data[key])) {
-                    data[key] = [data[key]];
-                }
-                data[key].push(value);
-            } else {
-                data[key] = value;
-            }
+    // --- Province and City Dropdowns ---
+    function populateProvinces() {
+        if (!provinceSelect) return;
+        provinceSelect.innerHTML = '<option value="">-- انتخاب استان --</option>';
+        Object.keys(provincesAndCities).forEach(province => {
+            const option = document.createElement('option');
+            option.value = province;
+            option.textContent = province;
+            provinceSelect.appendChild(option);
         });
+    }
 
-        try {
-            // The URL of your serverless function
-            // For Vercel, it's /api/send-telegram
-            // For Netlify, it's /.netlify/functions/send-telegram
-            const response = await fetch('/api/send-telegram', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+    function updateCities() {
+        if (!provinceSelect || !citySelect) return;
+        const selectedProvince = provinceSelect.value;
+        citySelect.innerHTML = '<option value="">-- انتخاب شهر --</option>';
+        citySelect.disabled = true;
+        if (selectedProvince && provincesAndCities[selectedProvince]) {
+            citySelect.disabled = false;
+            provincesAndCities[selectedProvince].forEach(city => {
+                const option = document.createElement('option');
+                option.value = city;
+                option.textContent = city;
+                citySelect.appendChild(option);
             });
-
-            if (!response.ok) {
-                throw new Error(`Server responded with ${response.status}`);
-            }
-
-            // Success!
-            form.reset(); // Clear the form
-            alert('درخواست شما با موفقیت ارسال شد! پاسخ در تلگرام برای شما ارسال گردید.');
-
-        } catch (error) {
-            console.error('Submission failed:', error);
-            alert('متاسفانه در ارسال درخواست خطایی رخ داد. لطفاً دوباره تلاش کنید.');
-        } finally {
-            // Restore button state
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = originalButtonText;
-            checkFormValidity(); // Re-check validity to disable it correctly
         }
-    });
-
-
-    // --- All other functions (unchanged from the previous correct version) ---
-    function updateNdaName() { /* ... */ }
-    function toggleLawyerFields() { /* ... */ }
-    function populateProvinces() { /* ... */ }
-    function updateCities() { /* ... */ }
-    function checkFormValidity() { /* ... */ }
-
-    // --- Event Listeners (unchanged) ---
-    if(fullNameInput) fullNameInput.addEventListener('input', updateNdaName);
-    // ... all other event listeners ...
+    }
     
-    // --- Initial Setup (unchanged) ---
+    // --- Enable/Disable Submit Button ---
+    function checkFormValidity() {
+        if (!submitBtn || !termsAgreeCheckbox || !ndaAgreeCheckbox) return;
+        submitBtn.disabled = !(termsAgreeCheckbox.checked && ndaAgreeCheckbox.checked);
+    }
+
+    // --- Event Listeners ---
+    if(fullNameInput) fullNameInput.addEventListener('input', updateNdaName);
+    if(clientTypeRadios) clientTypeRadios.forEach(radio => radio.addEventListener('change', toggleLawyerFields));
+    if(provinceSelect) provinceSelect.addEventListener('change', updateCities);
+    if(termsAgreeCheckbox) termsAgreeCheckbox.addEventListener('change', checkFormValidity);
+    if(ndaAgreeCheckbox) ndaAgreeCheckbox.addEventListener('change', checkFormValidity);
+    
+    // --- Initial Setup ---
     populateProvinces();
+    console.log("Form script loaded and initialized successfully.");
 });
