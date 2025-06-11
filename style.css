@@ -1,0 +1,203 @@
+/* --- FONT IMPORT --- */
+@font-face {
+    font-family: 'Yekan Bakh';
+    src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn-Regular.woff2') format('woff2');
+    font-weight: 400;
+}
+@font-face {
+    font-family: 'Yekan Bakh';
+    src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn-Bold.woff2') format('woff2');
+    font-weight: 700;
+}
+@font-face {
+    font-family: 'Yekan Bakh';
+    src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn-Black.woff2') format('woff2');
+    font-weight: 900;
+}
+
+/* --- VARIABLES & BASE --- */
+:root {
+    --navy-dark: #0d1b2a;
+    --navy-mid: #1b263b;
+    --navy-light: #415a77;
+    --grey-light: #e9ecef;
+    --off-white: #f8f9fa;
+    --white: #ffffff;
+    --font-family: 'Yekan Bakh', sans-serif;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--grey-light);
+    color: var(--navy-dark);
+    line-height: 1.7;
+    margin: 0;
+    padding: 2rem 1rem;
+    direction: rtl;
+}
+
+/* --- CONTAINER & HEADER --- */
+.form-container { max-width: 850px; margin: 0 auto; background-color: var(--white); border-radius: 20px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1); overflow: hidden; }
+.form-header { background-color: var(--navy-dark); color: var(--white); padding: 2rem; text-align: center; }
+.logo { width: 70px; height: auto; margin-bottom: 1rem; filter: brightness(0) invert(1); }
+.form-header h1 { font-weight: 900; font-size: 2rem; margin: 0 0 0.5rem 0; }
+.form-header p { font-weight: 400; font-size: 1.1rem; opacity: 0.9; margin: 0; }
+
+/* --- FORM & FIELDSET --- */
+form { padding: 1.5rem 2.5rem; }
+fieldset { border: none; padding: 1.5rem 0; margin: 0; border-bottom: 1px solid var(--grey-light); }
+fieldset:last-of-type { border-bottom: none; }
+legend { font-size: 1.5rem; font-weight: 700; color: var(--navy-dark); margin-bottom: 2rem; display: flex; align-items: center; gap: 0.75rem; }
+
+/* --- INPUTS & CONTROLS --- */
+.form-row { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+.form-group { margin-bottom: 1.5rem; flex: 1 1 300px; }
+.form-group label:not(.custom-checkbox-label), .group-label { display: block; margin-bottom: 0.75rem; font-weight: 700; font-size: 1rem; }
+
+input[type="text"], input[type="tel"], select, textarea {
+    width: 100%; padding: 0.9rem 1.2rem; border: 1px solid var(--grey-light); border-radius: 10px;
+    font-family: var(--font-family); font-size: 1rem; transition: all 0.3s ease; box-sizing: border-box; background-color: var(--off-white);
+}
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--navy-light); box-shadow: 0 0 0 4px rgba(65, 90, 119, 0.2); background-color: var(--white); }
+select[disabled] { background-color: #e9ecef; cursor: not-allowed; }
+
+/* --- CUSTOM RADIO PILLS & CHECKBOXES --- */
+.radio-group-pills { display: flex; border: 1px solid var(--grey-light); border-radius: 10px; overflow: hidden; }
+.radio-group-pills label { flex: 1; text-align: center; }
+.radio-group-pills input { display: none; }
+.radio-group-pills span { display: block; padding: 0.8rem; cursor: pointer; transition: all 0.3s ease; font-weight: 500; }
+.radio-group-pills input:checked + span { background-color: var(--navy-mid); color: var(--white); }
+
+.custom-checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.5rem;
+    position: relative;
+}
+.custom-checkbox-label input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+.custom-checkbox-label .checkmark {
+    height: 1.5em;
+    width: 1.5em;
+    background-color: var(--off-white);
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    flex-shrink: 0; /* Important for alignment */
+    margin-left: 0.75em;
+    position: relative;
+}
+.custom-checkbox-label:hover input ~ .checkmark {
+    border-color: var(--navy-light);
+}
+.custom-checkbox-label input:checked ~ .checkmark {
+    background-color: var(--navy-dark);
+    border-color: var(--navy-dark);
+}
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 0.45em;
+    top: 0.2em;
+    width: 0.4em;
+    height: 0.8em;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+}
+.custom-checkbox-label input:checked ~ .checkmark:after {
+    display: block;
+}
+.custom-checkbox-label span {
+    line-height: 1.5; /* Align text vertically */
+}
+
+
+/* --- OTHER SECTIONS --- */
+.hidden-fields { max-height: 0; overflow: hidden; transition: all 0.5s ease-in-out; opacity: 0; }
+.hidden-fields.visible { max-height: 300px; opacity: 1; margin-top: 1.5rem; }
+
+.accordion { margin-bottom: 1.5rem; border: 1px solid var(--grey-light); border-radius: 10px; overflow: hidden; }
+.accordion summary {
+    padding: 1rem 1.5rem; font-weight: 700; color: var(--white); background-color: var(--navy-mid);
+    cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center;
+}
+.accordion summary::after {
+    content: ''; display: inline-block; width: 0.5em; height: 0.5em;
+    border-right: 2px solid white; border-bottom: 2px solid white;
+    transform: translateY(-25%) rotate(45deg); transition: transform 0.3s;
+}
+.accordion[open] > summary::after { transform: translateY(0) rotate(-135deg); }
+.accordion-content { padding: 0; border-top: 1px solid var(--grey-light); }
+
+/* --- NEW and CORRECTED TABLE STYLES --- */
+.accordion-content table {
+    width: 100%;
+    border-collapse: collapse; /* Essential for table look */
+    table-layout: auto; /* Browser automatically handles column widths */
+}
+.accordion-content th, .accordion-content td {
+    padding: 1rem;
+    text-align: right;
+    border-bottom: 1px solid var(--grey-light);
+    line-height: 1.6; /* Normal line height for table rows */
+}
+.accordion-content th {
+    font-weight: 700;
+    color: var(--navy-dark);
+    background-color: var(--off-white);
+}
+.accordion-content tbody tr:last-child td {
+    border-bottom: none;
+}
+.accordion-content tbody tr:hover {
+    background-color: #f1f3f5;
+}
+
+.legal-text { font-size: 0.9rem; line-height: 2; max-height: 200px; overflow-y: auto; background-color: var(--off-white); padding: 1.5rem; border-radius: 8px; }
+.dynamic-name { color: var(--navy-dark); font-weight: 700; background-color: #ffc1074d; padding: 0.1rem 0.4rem; border-radius: 4px; }
+
+.info-box { display: flex; align-items: center; gap: 1rem; background-color: #e7f3ff; color: #0056b3; padding: 1rem 1.5rem; border-radius: 10px; margin: 1.5rem 0; border: 1px solid #b3d7ff; }
+.info-box i { font-size: 1.5rem; }
+
+/* --- SUBMIT BUTTON & FOOTER --- */
+.form-actions { display: flex; justify-content: center; margin-top: 2rem; }
+.submit-btn { display: flex; align-items: center; gap: 0.75rem; padding: 1rem 3rem; border: none; border-radius: 12px; font-family: var(--font-family); font-size: 1.2rem; font-weight: 700; cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); background-color: var(--navy-dark); color: var(--white); position: relative; overflow: hidden; }
+.submit-btn:before { content: ''; position: absolute; top: 50%; left: 50%; width: 0; height: 0; background-color: var(--navy-light); border-radius: 50%; transform: translate(-50%, -50%); transition: width 0.4s, height 0.4s; z-index: 0; }
+.submit-btn:hover:not(:disabled):before { width: 250%; height: 250%; }
+.submit-btn:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(27, 38, 59, 0.2); }
+.submit-btn .btn-text, .submit-btn i { position: relative; z-index: 1; }
+.submit-btn:disabled { background-color: #adb5bd; cursor: not-allowed; box-shadow: none; }
+
+.form-footer { text-align: center; margin-top: 1.5rem; font-size: 0.85rem; color: #6c757d; padding: 0 2rem 1rem 2rem; }
+
+/* --- RESPONSIVENESS --- */
+@media (max-width: 768px) {
+    body { padding: 1rem 0; }
+    form { padding: 1rem 1.5rem; }
+    .form-header h1 { font-size: 1.8rem; }
+    legend { font-size: 1.3rem; }
+    .form-row { flex-direction: column; gap: 0; }
+    .terms-fieldset { margin: 0 -1.5rem; padding: 1.5rem; }
+/* Add this to the end of style.css */
+.spinner {
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top: 3px solid #fff;
+  width: 1.2em;
+  height: 1.2em;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+}
