@@ -53,7 +53,7 @@
                 </div>
 
                 <div class="form-row">
-                     <div class="form-group">
+                    <div class="form-group">
                         <label for="nationalId">کد ملی</label>
                         <input type="tel" id="nationalId" name="کد ملی" inputmode="numeric" pattern="[0-9]{10}" maxlength="10">
                     </div>
@@ -90,22 +90,22 @@
                             <tbody>
                                 <tr>
                                     <td>تنظیم اوراق قضایی</td>
-                                    <td>هر صفحه استاندارد (لایحه، دادخواست و...)</td>
+                                    <td>هر صفحه استاندارد</td>
                                     <td>۷۰۰,۰۰۰ تومان</td>
                                 </tr>
                                 <tr>
                                     <td>تحلیل و تفسیر حکم</td>
-                                    <td>ارائه گزارش طبقه‌بندی شده از رأی دادگاه</td>
+                                    <td>ارائه گزارش طبقه‌بندی شده</td>
                                     <td>۱,۵۰۰,۰۰۰ تومان</td>
                                 </tr>
                                 <tr>
                                     <td>تبدیل صوت به متن</td>
-                                    <td>به ازای هر دقیقه فایل صوتی</td>
+                                    <td>به ازای هر دقیقه</td>
                                     <td>۱۵,۰۰۰ تومان</td>
                                 </tr>
                                 <tr>
                                     <td>تولید محتوای حقوقی</td>
-                                    <td>تدوین ویدیو (دقیقه‌ای) یا طراحی پست</td>
+                                    <td>ویدیو یا پست گرافیکی</td>
                                     <td>تماس بگیرید</td>
                                 </tr>
                             </tbody>
@@ -115,22 +115,22 @@
                 <div class="form-group checkbox-group">
                     <label class="group-label">خدمات مورد نیاز:</label>
                     <label class="custom-checkbox-label">
-                        <input type="checkbox" name="خدمت" value="layeheh">
+                        <input type="checkbox" name="خدمت" value="تنظیم اوراق قضایی">
                         <span class="checkmark"></span>
                         <span>تنظیم اوراق قضایی</span>
                     </label>
                     <label class="custom-checkbox-label">
-                        <input type="checkbox" name="خدمت" value="tahlil">
+                        <input type="checkbox" name="خدمت" value="تحلیل و تفسیر حکم">
                         <span class="checkmark"></span>
                         <span>تحلیل و تفسیر حکم</span>
                     </label>
                     <label class="custom-checkbox-label">
-                        <input type="checkbox" name="خدمت" value="transcribe">
+                        <input type="checkbox" name="خدمت" value="تبدیل صوت به متن">
                         <span class="checkmark"></span>
                         <span>تبدیل صوت به متن</span>
                     </label>
                     <label class="custom-checkbox-label">
-                        <input type="checkbox" name="خدمت" value="content">
+                        <input type="checkbox" name="خدمت" value="تولید محتوای حقوقی">
                         <span class="checkmark"></span>
                         <span>تولید محتوای حقوقی</span>
                     </label>
@@ -178,3 +178,22 @@
                 <button type="submit" id="submit-btn" class="submit-btn" disabled>
                     <span class="btn-text">ثبت نهایی درخواست</span>
                     <i class="bi bi-send-check-fill"></i>
+                </button>
+            </div>
+             <footer class="form-footer">
+                <p>کلیه حقوق مادی و معنوی این صفحه متعلق به مجموعه دادبان الکترونیک می‌باشد.</p>
+            </footer>
+        </form>
+        
+        <div id="success-message" style="display: none;">
+            <div class="success-icon">
+                <i class="bi bi-check-circle-fill"></i>
+            </div>
+            <h2>درخواست شما با موفقیت ثبت شد</h2>
+            <p>کارشناسان ما به زودی جهت هماهنگی‌های بعدی با شما تماس خواهند گرفت. از صبر و اعتماد شما سپاسگزاریم.</p>
+            <button type="button" class="reset-btn" onclick="location.reload()">ثبت یک درخواست جدید</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

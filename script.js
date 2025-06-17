@@ -1,7 +1,5 @@
-// File: script.js (The 100% Complete and Final Version with Smart Logic)
-
 document.addEventListener('DOMContentLoaded', function() {
-    // --- Comprehensive Data for Provinces and Cities of Iran ---
+    // --- Data for Provinces and Cities ---
     const provincesAndCities = {
         "آذربایجان شرقی": ["تبریز", "مراغه", "مرند", "اهر", "میانه", "بناب", "سراب", "آذرشهر", "عجب‌شیر", "شبستر", "جلفا", "هریس", "بستان‌آباد", "ورزقان", "اسکو", "کلیبر", "ملکان", "هادی‌شهر"],
         "آذربایجان غربی": ["ارومیه", "خوی", "مهاباد", "بوکان", "میاندوآب", "سلماس", "پیرانشهر", "نقده", "تکاب", "شاهین‌دژ", "ماکو", "سردشت", "اشنویه", "چایپاره", "شوط"],
@@ -36,8 +34,12 @@ document.addEventListener('DOMContentLoaded', function() {
         "یزد": ["یزد", "میبد", "اردکان", "بافق", "تفت", "مهریز", "ابرکوه", "خاتم", "اشکذر"]
     };
 
-    // --- Get DOM Elements ---
+    // --- Get All DOM Elements ---
     const form = document.getElementById('serviceRequestForm');
+    if (!form) {
+        console.error("Fatal Error: Form element not found!");
+        return; // Stop script if the main form is missing
+    }
     const submitBtn = document.getElementById('submit-btn');
     const successMessageDiv = document.getElementById('success-message');
     const clientTypeRadios = document.querySelectorAll('input[name="نوع متقاضی"]');
@@ -53,40 +55,119 @@ document.addEventListener('DOMContentLoaded', function() {
     const ndaAgreeCheckbox = document.getElementById('nda-agree');
 
     // --- AJAX Form Submission Logic ---
-    if (form) {
-        form.addEventListener('submit', async function(event) {
-            event.preventDefault();
+    form.addEventListener('submit', async function(event) {
+        event.preventDefault();
 
-            const originalButtonHTML = submitBtn.innerHTML;
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = `<span class="btn-text">در حال ارسال...</span><div class="spinner"></div>`;
+        const originalButtonHTML = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span class="btn-text">در حال ارسال...</span><div class="spinner"></div>`;
 
-            const formData = new FormData(form);
-            const data = {};
-            
-            for (const [key, value] of formData.entries()) {
-                if (key === 'خدمت') {
-                    if (!data[key]) {
-                        data[key] = [];
-                    }
-                    data[key].push(value);
-                } else {
-                    data[key] = value;
-                }
+        const formData = new FormData(form);
+        const data = {};
+        
+        for (const [key, value] of formData.entries()) {
+            if (key === 'خدمت') {
+                if (!data[key]) data[key] = [];
+                data[key].push(value);
+            } else {
+                data[key] = value;
             }
-            if (data['خدمت']) {
-                data['خدمت'] = data['خدمت'].join('، ');
+        }
+        if (data['خدمت'] && Array.isArray(data['خدمت'])) {
+            data['خدمت'] = data['خدمت'].join('، ');
+        }
+
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            });
+
+            if (response.ok) {
+                form.reset(); 
+                form.style.display = 'none';
+                if(successMessageDiv) successMessageDiv.style.display = 'block';
+            } else {
+                throw new Error('پاسخ سرور موفقیت‌آمیز نبود.');
             }
+        } catch (error) {
+            console.error('Submission failed:', error);
+            alert('متاسفانه در ارسال درخواست خطایی رخ داد. لطفاً دوباره تلاش کنید.');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalButtonHTML;
+        }
+    });
 
-            try {
-                const response = await fetch('/api/send-telegram', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data),
-                });
+    // --- Helper Function: Dynamic Name Insertion in NDA ---
+    function updateNdaName() {
+        if (!ndaClientNameSpan) return;
+        const isLawyer = document.querySelector('input[name="نوع متقاضی"]:checked').value === 'lawyer';
+        const nameSourceInput = isLawyer ? lawyerNameInput : fullNameInput;
+        
+        if (nameSourceInput) {
+            const name = nameSourceInput.value.trim();
+            ndaClientNameSpan.textContent = name ? name : "شما";
+        }
+    }
 
-                if (response.ok) {
-                    form.reset(); 
-                    form.style.display = 'none';
-                    if(successMessageDiv) successMessageDiv.style.display = 'block';
-                } else
+    // --- Helper Function: Conditional Fields Logic ---
+    function toggleLawyerFields() {
+        const isLawyer = document.querySelector('input[name="نوع متقاضی"]:checked').value === 'lawyer';
+        
+        if (lawyerFieldsDiv) lawyerFieldsDiv.classList.toggle('visible', isLawyer);
+        if (individualNameFieldDiv) individualNameFieldDiv.classList.toggle('visible', !isLawyer);
+
+        if (lawyerNameInput) lawyerNameInput.required = isLawyer;
+        if (licenseNumberInput) licenseNumberInput.required = isLawyer;
+        if (fullNameInput) fullNameInput.required = !isLawyer;
+
+        updateNdaName();
+    }
+
+    // --- Helper Function: Province and City Dropdowns ---
+    function populateProvinces() {
+        if (!provinceSelect) return;
+        provinceSelect.innerHTML = '<option value="">-- انتخاب استان --</option>';
+        Object.keys(provincesAndCities).forEach(province => {
+            const option = document.createElement('option');
+            option.value = province;
+            option.textContent = province;
+            provinceSelect.appendChild(option);
+        });
+    }
+
+    function updateCities() {
+        if (!provinceSelect || !citySelect) return;
+        const selectedProvince = provinceSelect.value;
+        citySelect.innerHTML = '<option value="">-- انتخاب شهر --</option>';
+        citySelect.disabled = true;
+        if (selectedProvince && provincesAndCities[selectedProvince]) {
+            citySelect.disabled = false;
+            provincesAndCities[selectedProvince].forEach(city => {
+                const option = document.createElement('option');
+                option.value = city;
+                option.textContent = city;
+                citySelect.appendChild(option);
+            });
+        }
+    }
+    
+    // --- Helper Function: Enable/Disable Submit Button ---
+    function checkFormValidity() {
+        if (!submitBtn || !termsAgreeCheckbox || !ndaAgreeCheckbox) return;
+        submitBtn.disabled = !(termsAgreeCheckbox.checked && ndaAgreeCheckbox.checked);
+    }
+    
+    // --- Attach All Event Listeners ---
+    if(fullNameInput) fullNameInput.addEventListener('input', updateNdaName);
+    if(lawyerNameInput) lawyerNameInput.addEventListener('input', updateNdaName);
+    if(clientTypeRadios.length) clientTypeRadios.forEach(radio => radio.addEventListener('change', toggleLawyerFields));
+    if(provinceSelect) provinceSelect.addEventListener('change', updateCities);
+    if(termsAgreeCheckbox) termsAgreeCheckbox.addEventListener('change', checkFormValidity);
+    if(ndaAgreeCheckbox) ndaAgreeCheckbox.addEventListener('change', checkFormValidity);
+    
+    // --- Initial Page Setup ---
+    populateProvinces();
+    toggleLawyerFields(); // Set the initial state of the form on page load
+});
