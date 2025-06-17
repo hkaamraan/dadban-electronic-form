@@ -1,3 +1,5 @@
+// File: script.js (The 100% Complete and Final Version)
+
 document.addEventListener('DOMContentLoaded', function() {
     // --- Comprehensive Data for Provinces and Cities of Iran ---
     const provincesAndCities = {
@@ -56,36 +58,40 @@ document.addEventListener('DOMContentLoaded', function() {
             submitBtn.disabled = true;
             submitBtn.innerHTML = `<span class="btn-text">در حال ارسال...</span><div class="spinner"></div>`;
 
+            // Convert FormData to a plain object
             const formData = new FormData(form);
+            const formProps = Object.fromEntries(formData);
 
             try {
-                const response = await fetch(event.target.action, {
-                    method: form.method,
-                    body: formData,
+                // The target is our own serverless function on Vercel
+                const response = await fetch('/api/send-telegram', { 
+                    method: 'POST',
                     headers: {
-                        'Accept': 'application/json' // This header is THE KEY to fixing the CORS error
-                    }
+                        'Content-Type': 'application/json', // We are sending JSON
+                    },
+                    body: JSON.stringify(formProps), // The body is the JSON string
                 });
 
                 if (response.ok) {
                     // Success!
+                    form.reset(); 
                     form.style.display = 'none';
                     if(successMessageDiv) successMessageDiv.style.display = 'block';
                 } else {
-                    // Handle server-side errors from Formspree
-                    throw new Error('خطا در برقراری ارتباط با سرور.');
+                    // Handle server errors (like 500 from the function)
+                    throw new Error('پاسخ سرور موفقیت‌آمیز نبود.');
                 }
             } catch (error) {
+                // Handle network errors or failed fetch
                 console.error('Submission failed:', error);
-                alert('متاسفانه در ارسال درخواست خطایی رخ داد. لطفاً اتصال اینترنت خود را بررسی کرده و دوباره تلاش کنید.');
-                // Restore button state on error
+                alert('متاسفانه در ارسال درخواست خطایی رخ داد. لطفاً دوباره تلاش کنید.');
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalButtonHTML;
             }
         });
     }
 
-    // --- Dynamic Name Insertion in NDA ---
+    // --- Helper Function: Dynamic Name Insertion in NDA ---
     function updateNdaName() {
         const name = fullNameInput.value.trim();
         if (ndaClientNameSpan) {
@@ -93,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // --- Conditional Lawyer Fields ---
+    // --- Helper Function: Conditional Lawyer Fields ---
     function toggleLawyerFields() {
         const isLawyer = document.querySelector('input[name="نوع متقاضی"]:checked').value === 'lawyer';
         if (lawyerFieldsDiv) {
@@ -105,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // --- Province and City Dropdowns ---
+    // --- Helper Function: Province and City Dropdowns ---
     function populateProvinces() {
         if (!provinceSelect) return;
         provinceSelect.innerHTML = '<option value="">-- انتخاب استان --</option>';
@@ -133,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // --- Enable/Disable Submit Button ---
+    // --- Helper Function: Enable/Disable Submit Button ---
     function checkFormValidity() {
         if (!submitBtn || !termsAgreeCheckbox || !ndaAgreeCheckbox) return;
         submitBtn.disabled = !(termsAgreeCheckbox.checked && ndaAgreeCheckbox.checked);
