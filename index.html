@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <div class="form-container">
         <header class="form-header">
             <img src="logo.png" alt="آرم قوه قضاییه" class="logo">
@@ -17,7 +16,6 @@
         </header>
 
         <form id="serviceRequestForm" action="/api/send-telegram" method="POST">
-            
             <fieldset>
                 <legend><i class="bi bi-person-fill"></i> ۱. اطلاعات متقاضی</legend>
                 <div class="form-group">
@@ -47,10 +45,17 @@
                     </div>
                 </div>
 
-                <div class="form-row">
+                <div id="individual-name-field">
                     <div class="form-group">
                         <label for="fullName">نام و نام خانوادگی (متقاضی/رابط)</label>
-                        <input type="text" id="fullName" name="نام متقاضی" lang="fa" required>
+                        <input type="text" id="fullName" name="نام متقاضی" lang="fa">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                     <div class="form-group">
+                        <label for="nationalId">کد ملی</label>
+                        <input type="tel" id="nationalId" name="کد ملی" inputmode="numeric" pattern="[0-9]{10}" maxlength="10">
                     </div>
                     <div class="form-group">
                         <label for="phone">شماره تماس</label>
@@ -68,7 +73,7 @@
                     </div>
                 </div>
             </fieldset>
-
+            
             <fieldset>
                 <legend><i class="bi bi-briefcase-fill"></i> ۲. جزئیات درخواست خدمات</legend>
                 <details class="accordion">
@@ -155,14 +160,14 @@
                 </details>
                 <div class="form-group">
                     <label class="custom-checkbox-label">
-                        <input type="checkbox" id="nda-agree" name="پذیرش_محرمانگی" value="پذیرفته شد" required>
+                        <input type="checkbox" id="nda-agree" name="پذیرش محرمانگی" value="پذیرفته شد" required>
                         <span class="checkmark"></span>
                         <span>متن قرارداد محرمانگی فوق را مطالعه کرده و به عنوان متقاضی، کلیه مفاد آن را می‌پذیرم.</span>
                     </label>
                 </div>
                  <div class="form-group">
                     <label class="custom-checkbox-label">
-                        <input type="checkbox" id="terms-agree" name="پذیرش_قوانین" value="پذیرفته شد" required>
+                        <input type="checkbox" id="terms-agree" name="پذیرش قوانین" value="پذیرفته شد" required>
                         <span class="checkmark"></span>
                         <span>با ثبت این فرم، مسئولیت صحت اطلاعات و استفاده از خروجی خدمات را پذیرفته و کلیه قوانین و تعرفه‌ها را قبول دارم.</span>
                     </label>
@@ -173,25 +178,3 @@
                 <button type="submit" id="submit-btn" class="submit-btn" disabled>
                     <span class="btn-text">ثبت نهایی درخواست</span>
                     <i class="bi bi-send-check-fill"></i>
-                </button>
-            </div>
-             <footer class="form-footer">
-                <p>کلیه حقوق مادی و معنوی این صفحه متعلق به مجموعه دادبان الکترونیک می‌باشد.</p>
-            </footer>
-        </form>
-    </div>
-<div id="success-message" style="display: none;">
-            <div class="success-icon">
-                <i class="bi bi-check-circle-fill"></i>
-            </div>
-            <h2>درخواست شما با موفقیت ثبت شد</h2>
-            <p>کارشناسان ما به زودی جهت هماهنگی‌های بعدی با شما تماس خواهند گرفت. از صبر و اعتماد شما سپاسگزاریم.</p>
-            <button type="button" class="reset-btn" onclick="location.reload()">ثبت یک درخواست جدید</button>
-        </div>
-    </div> <script src="script.js"></script>
-</body>
-</html>
-
-    <script src="script.js"></script>
-</body>
-</html>
