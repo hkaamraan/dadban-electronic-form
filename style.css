@@ -89,7 +89,7 @@ select[disabled] { background-color: #e9ecef; cursor: not-allowed; }
     border: 2px solid #ccc;
     border-radius: 6px;
     transition: all 0.2s ease;
-    flex-shrink: 0; /* Important for alignment */
+    flex-shrink: 0;
     margin-left: 0.75em;
     position: relative;
 }
@@ -116,13 +116,14 @@ select[disabled] { background-color: #e9ecef; cursor: not-allowed; }
     display: block;
 }
 .custom-checkbox-label span {
-    line-height: 1.5; /* Align text vertically */
+    line-height: 1.5;
 }
 
 
 /* --- OTHER SECTIONS --- */
 .hidden-fields { max-height: 0; overflow: hidden; transition: all 0.5s ease-in-out; opacity: 0; }
-.hidden-fields.visible { max-height: 300px; opacity: 1; margin-top: 1.5rem; }
+/* *** FIX: Increased max-height for mobile stacking *** */
+.hidden-fields.visible { max-height: 500px; opacity: 1; margin-top: 1.5rem; }
 
 .accordion { margin-bottom: 1.5rem; border: 1px solid var(--grey-light); border-radius: 10px; overflow: hidden; }
 .accordion summary {
@@ -137,17 +138,16 @@ select[disabled] { background-color: #e9ecef; cursor: not-allowed; }
 .accordion[open] > summary::after { transform: translateY(0) rotate(-135deg); }
 .accordion-content { padding: 0; border-top: 1px solid var(--grey-light); }
 
-/* --- NEW and CORRECTED TABLE STYLES --- */
 .accordion-content table {
     width: 100%;
-    border-collapse: collapse; /* Essential for table look */
-    table-layout: auto; /* Browser automatically handles column widths */
+    border-collapse: collapse;
+    table-layout: auto;
 }
 .accordion-content th, .accordion-content td {
     padding: 1rem;
     text-align: right;
     border-bottom: 1px solid var(--grey-light);
-    line-height: 1.6; /* Normal line height for table rows */
+    line-height: 1.6;
 }
 .accordion-content th {
     font-weight: 700;
@@ -167,7 +167,14 @@ select[disabled] { background-color: #e9ecef; cursor: not-allowed; }
 .info-box { display: flex; align-items: center; gap: 1rem; background-color: #e7f3ff; color: #0056b3; padding: 1rem 1.5rem; border-radius: 10px; margin: 1.5rem 0; border: 1px solid #b3d7ff; }
 .info-box i { font-size: 1.5rem; }
 
-/* --- SUBMIT BUTTON & FOOTER --- */
+/* --- SUCCESS MESSAGE & SUBMIT BUTTON & FOOTER --- */
+#success-message { text-align: center; padding: 3rem 2rem; animation: fadeIn 0.8s ease-in-out; }
+.success-icon { font-size: 5rem; color: #28a745; line-height: 1; margin-bottom: 1.5rem; }
+#success-message h2 { font-weight: 700; font-size: 1.8rem; color: var(--navy-dark); margin-bottom: 1rem; }
+#success-message p { font-size: 1.1rem; color: var(--navy-light); max-width: 500px; margin: 0 auto 2rem auto; }
+.reset-btn { padding: 0.8rem 2rem; border: 1px solid var(--grey-light); border-radius: 8px; font-family: var(--font-family); font-size: 1rem; font-weight: 500; cursor: pointer; background-color: transparent; color: var(--navy-light); transition: all 0.3s ease; }
+.reset-btn:hover { background-color: var(--grey-light); color: var(--navy-dark); transform: translateY(-2px); }
+
 .form-actions { display: flex; justify-content: center; margin-top: 2rem; }
 .submit-btn { display: flex; align-items: center; gap: 0.75rem; padding: 1rem 3rem; border: none; border-radius: 12px; font-family: var(--font-family); font-size: 1.2rem; font-weight: 700; cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); background-color: var(--navy-dark); color: var(--white); position: relative; overflow: hidden; }
 .submit-btn:before { content: ''; position: absolute; top: 50%; left: 50%; width: 0; height: 0; background-color: var(--navy-light); border-radius: 50%; transform: translate(-50%, -50%); transition: width 0.4s, height 0.4s; z-index: 0; }
@@ -178,6 +185,12 @@ select[disabled] { background-color: #e9ecef; cursor: not-allowed; }
 
 .form-footer { text-align: center; margin-top: 1.5rem; font-size: 0.85rem; color: #6c757d; padding: 0 2rem 1rem 2rem; }
 
+.spinner { border: 3px solid rgba(255, 255, 255, 0.3); border-radius: 50%; border-top: 3px solid #fff; width: 1.2em; height: 1.2em; animation: spin 1s linear infinite; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+
 /* --- RESPONSIVENESS --- */
 @media (max-width: 768px) {
     body { padding: 1rem 0; }
@@ -186,84 +199,6 @@ select[disabled] { background-color: #e9ecef; cursor: not-allowed; }
     legend { font-size: 1.3rem; }
     .form-row { flex-direction: column; gap: 0; }
     .terms-fieldset { margin: 0 -1.5rem; padding: 1.5rem; }
-/* Add this to the end of style.css */
-.spinner {
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  border-top: 3px solid #fff;
-  width: 1.2em;
-  height: 1.2em;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-}
-/* --- SUCCESS MESSAGE STYLES --- */
-#success-message {
-    text-align: center;
-    padding: 3rem 2rem;
-    animation: fadeIn 0.8s ease-in-out;
-}
-
-.success-icon {
-    font-size: 5rem;
-    color: #28a745; /* Success Green */
-    line-height: 1;
-    margin-bottom: 1.5rem;
-}
-
-#success-message h2 {
-    font-weight: 700;
-    font-size: 1.8rem;
-    color: var(--navy-dark);
-    margin-bottom: 1rem;
-}
-
-#success-message p {
-    font-size: 1.1rem;
-    color: var(--navy-light);
-    max-width: 500px;
-    margin: 0 auto 2rem auto;
-}
-
-.reset-btn {
-    padding: 0.8rem 2rem;
-    border: 1px solid var(--grey-light);
-    border-radius: 8px;
-    font-family: var(--font-family);
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    background-color: transparent;
-    color: var(--navy-light);
-    transition: all 0.3s ease;
-}
-
-.reset-btn:hover {
-    background-color: var(--grey-light);
-    color: var(--navy-dark);
-    transform: translateY(-2px);
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* --- SPINNER FOR SUBMIT BUTTON --- */
-.spinner {
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  border-top: 3px solid #fff;
-  width: 1.2em;
-  height: 1.2em;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+    /* *** FIX: Reduced vertical spacing on mobile *** */
+    .form-group { margin-bottom: 1.1rem; } 
 }
